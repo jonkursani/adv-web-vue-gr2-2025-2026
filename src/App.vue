@@ -2,7 +2,7 @@
 
 <!-- script logic - JS -->
 <script setup>
-import { ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
 // const heading = document.getElementById("heading");
 // heading.innerHTML = "You did it!";
@@ -39,6 +39,62 @@ function onInput(event) {
   // if (event.key === "Enter") {}
   name.value = event.target.value
 }
+
+// Reactivity (ref, reactive)
+// pranon tipe primitive dhe reference
+// arrays, objects
+const count = ref(0) // { value: 0 }
+
+// console.log(count.value)
+
+function increment(num = 1) {
+  // count.value = count.value + 1;
+  console.log(count);
+  console.log(count.value);
+  // count.value++;
+  count.value += num
+}
+
+const userRef = ref({ // { value: { name: "John", age: 30 } }
+  name: "John",
+  age: 30
+})
+
+// userRef.value.name = "Jane";
+
+// Reactive nuk pranon tipe primitive, vetem reference
+// const isActive = reactive(false) // Error
+const user = reactive({
+  name: "Jane",
+  age: 30
+})
+
+// user.name = "John";
+const state = reactive({
+  count: 0
+})
+
+function decrement() {
+  state.count--;
+}
+
+// Computed properties - functions that return a value based on reactive data and are cached until their dependencies change
+const author = reactive({
+  name: "John Doe",
+  books: [
+    { title: "Book 1", year: 2020 },
+    { title: "Book 2", year: 2021 },
+    { title: "Book 3", year: 2022 }
+  ] 
+})
+
+const hasPublishedBooks = computed(() => {
+  return author.books.length > 0 ? 'has published books' : 'has not published books'
+})
+
+const fullName = computed(() => {
+  return `${user.name} Doe`;
+})
 </script>
 
 <!-- template - HTML -->
@@ -95,6 +151,32 @@ function onInput(event) {
 
   <input type="text" placeholder="Enter your name..." @keyup.enter="onInput">
   <p>Name: {{ name }}</p>
+
+  <!-- Reactivity -->
+  <button @click="count--">-</button>
+  <button @click="count-=5">-5</button>
+  <p>Count: {{ count }}</p>
+  <button @click="increment(1)">+</button>
+  <button @click="increment(10)">+10</button>
+
+  <!-- ne template nuk i referohemi me userRef.value -->
+  <p>User name: {{  userRef.name }}</p>
+  <p>User name reactive: {{  user.name }}</p>
+
+  <button @click="decrement">-</button>
+  <p>Count reactive: {{ state.count }}</p>
+  <button @click="state.count++">+</button>
+
+  <!-- Computed properties -->
+  <p>
+    Author: {{ author.name }}
+    <!-- {{ author.books.length > 0 ? 'has published books' : 'has not published books' }} -->
+    <!-- {{ hasPublishedBooks() }} error because hasPublishedBooks is not a function -->
+    {{ hasPublishedBooks }}
+    {{ author.books.length }}
+  </p>
+
+  <p>Full name: {{ fullName }}</p>
 </template>
 
 <!-- styles - CSS -->
