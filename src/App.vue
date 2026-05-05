@@ -3,6 +3,7 @@
 <!-- script logic - JS -->
 <script setup>
 import { computed, reactive, ref } from 'vue';
+import Detyra1 from './Detyra1.vue';
 
 // const heading = document.getElementById("heading");
 // heading.innerHTML = "You did it!";
@@ -95,6 +96,38 @@ const hasPublishedBooks = computed(() => {
 const fullName = computed(() => {
   return `${user.name} Doe`;
 })
+
+// Class binding
+const isActive = ref(true) // { value: true }
+const hasError = ref(false) // { value: false }
+const classObject = reactive({
+  active: false,
+  'text-danger': true
+})
+
+const completed = ref(true)
+const classObjComputed = computed(() => {
+  return {
+    // completed: completed.value === true
+    completed: completed.value, // && !hasError.value, // true && false => false
+    'text-danger': !completed.value
+    // 'text-danger': completed.value === false
+  }
+})
+
+// Style binding
+const blueColor = ref('blue')
+const uppercase = ref('uppercase')
+const styleObject = reactive({
+  color: 'purple',
+  // 'font-size': '20px',
+  fontSize: '20px'
+})
+
+// Conditional rendering
+const awesome = ref(true)
+const type = ref('C')
+const ok = ref(false)
 </script>
 
 <!-- template - HTML -->
@@ -177,8 +210,94 @@ const fullName = computed(() => {
   </p>
 
   <p>Full name: {{ fullName }}</p>
+
+  <!-- key: osht klasa ne css, value: variabla ne script  -->
+  <p
+    class="klasa-statike"
+    :class="{ active: isActive, 'text-danger': hasError }"
+  >
+    Class binding
+  </p>
+
+  <p :class="classObject">Class object</p>
+
+  <p :class="classObjComputed">
+    Class object computed
+    <button @click="completed = !completed">Toggle completed</button>
+  </p>
+
+  <p :class="[
+    'active', 
+    'text-danger', 
+    //  completed ? 'completed' : ''
+    { completed: completed }
+  ]">
+    Binding to array
+  </p>
+
+  <!-- Style bindings -->
+  <p :style="{ 
+    color: blueColor, 
+    textTransform: uppercase
+    // 'text-transform': uppercase
+  }">
+    Style binding
+  </p>
+
+  <p :style="styleObject">Style object</p>
+
+  <!-- 
+    Conditional rendering
+    v-if - renders the element and its children only if the condition is true
+    v-else-if - renders the element and its children if the previous condition is false and
+    v-else - renders the element and its children if the previous conditions are false
+    v-show - toggles the display CSS property of the element based on the condition (does not remove the element from the DOM)
+  -->
+
+  <p v-if="awesome">Vue is awesome</p>
+  <p v-else>Vue is not awesome</p>
+  <button @click="awesome = !awesome">Toggle text</button>
+
+  <p v-if="type === 'A'">
+    Type A
+  </p>
+  <p v-else-if="type === 'B'">
+    Type B
+  </p>
+  <p v-else>
+    Other type
+  </p>
+
+  <!-- Template tag -->
+  <!-- <h1 v-if="ok">Template</h1>
+  <p v-if="ok">This is a paragraph inside a template</p> -->
+  <!-- 
+      per grupim te elementeve
+      nuk shfaqet ne DOM 
+  -->
+  <template v-if="ok">
+    <h1>Template</h1>
+    <p>This is a paragraph inside a template</p>
+  </template>
+
+  <p v-show="ok">V-show</p>
+
+  <Detyra1 />
 </template>
 
 <!-- styles - CSS -->
 <!-- scoped - css applied only to this component -->
-<style scoped></style>
+<style scoped>
+.active {
+  font-weight: bold;
+}
+
+.text-danger {
+  color: red;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: green
+}
+</style>
