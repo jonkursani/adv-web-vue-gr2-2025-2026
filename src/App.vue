@@ -35,7 +35,7 @@ function onSubmit() {
 }
 
 const name = ref("");
-function onInput(event) {
+function onType(event) {
   // event.target - refers to the input element
   // if (event.key === "Enter") {}
   name.value = event.target.value
@@ -128,6 +128,23 @@ const styleObject = reactive({
 const awesome = ref(true)
 const type = ref('C')
 const ok = ref(false)
+
+// Form input bindings
+const text = ref("");
+// function onInput(e) {
+//   text.value = e.target.value 
+// }
+const textArea = ref("");
+const checked = ref(false)
+const checkedFrameworks = ref(['react']);
+const picked = ref('two')
+const selected = ref('')
+const options = ref([
+  { value: 'it', text: 'Information Technology' },
+  { value: 'fi', text: 'Finance' },
+  { value: 'hr', text: 'Human Resources' }
+])
+const two = ref('two')
 </script>
 
 <!-- template - HTML -->
@@ -182,7 +199,7 @@ const ok = ref(false)
     </form>
   </div>
 
-  <input type="text" placeholder="Enter your name..." @keyup.enter="onInput">
+  <input type="text" placeholder="Enter your name..." @keyup.enter="onType">
   <p>Name: {{ name }}</p>
 
   <!-- Reactivity -->
@@ -283,6 +300,91 @@ const ok = ref(false)
   <p v-show="ok">V-show</p>
 
   <Detyra1 />
+
+  <!-- 
+    List rendering 
+    v-for - renders a list of items based on an array  
+  -->
+  <ul>
+    <li v-for="numri in 5">
+      {{ numri }}
+    </li>
+  </ul>
+
+  <p>Author books</p>
+  <!-- author.books.length 0 => false -->
+   <!-- forEach(item, index) -->
+  <ul v-if="author.books.length">
+    <!-- <li v-for="book in author.books"> -->
+    <!-- <li v-for="(book, indeksi) in author.books"> -->
+    <!-- v-for with template -->
+    <!-- nuk preferohet me u perdor v-if edhe v-for, v-if ka prioritet -->
+    <!-- :key - unique key  -->
+    <template v-for="({ title, year }, indeksi) in author.books" :key="indeksi">
+      <li>{{ indeksi }} - {{ title }} - ({{ year }})</li>
+      <hr>
+    </template>
+  </ul>
+  <ul v-else>
+    <li>No books available</li>
+  </ul>
+
+  <!-- v-for with object -->
+  <ul>
+    <li v-for="(vlera, celsi, indeksi) in user">
+      {{ indeksi }} - {{ celsi }}: {{ vlera }}
+    </li>
+  </ul>
+
+  <!-- Form input bindings -->
+  <!-- Two way data binding -->
+  <!-- <input type="text" :value="text" @input="onInput"> -->
+  <input type="text" v-model="text">
+  <p>Text: {{ text }}</p>
+
+  <!-- Text area -->
+  <textarea v-model="textArea"></textarea>
+  <p>Text area: {{ textArea }}</p>
+
+  <!-- Single checkbox -->
+  <input type="checkbox" id="chck" v-model="checked">
+  <label for="chck">Check me</label>
+  <p>Checked: {{ checked }}</p>
+
+  <!-- Multiple checkbox -->
+  <p>Choose your favorite frameworks:</p>
+  <!-- value dergohet ne server -->
+  <input type="checkbox" id="vue" value="vue" v-model="checkedFrameworks">
+  <label for="vue">Vue</label>
+  <input type="checkbox" id="react" value="react" v-model="checkedFrameworks">
+  <label for="react">React</label>
+  <input type="checkbox" id="angular" value="angular" v-model="checkedFrameworks">
+  <label for="angular">Angular</label>
+  <p>Checked frameworks: {{ checkedFrameworks }}</p>
+
+  <!-- Radio buttons -->
+  <input type="radio" id="one" value="one" v-model="picked">
+  <label for="one">One</label>
+  <input type="radio" id="two" :value="two" v-model="picked">
+  <label for="two">Two</label>
+  <p>Picked: {{ picked }}</p>
+
+  <!-- Select -->
+  <!-- v-model vendoset te <select> jo te option -->
+  <select v-model="selected">
+    <option value="" disabled>Select an option</option>
+    <!-- <option value="a">A</option>
+    <option value="b">B</option>
+    <option value="c">C</option> -->
+    <option 
+      v-for="(option, index) in options" 
+      :key="index" 
+      :value="option.value"
+    >
+      {{ option.text }}
+    </option>
+  </select>
+  <p>Selected: {{ selected }}</p>
 </template>
 
 <!-- styles - CSS -->
