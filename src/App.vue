@@ -4,6 +4,8 @@
 <script setup>
 import { computed, reactive, ref } from 'vue';
 import Detyra1 from './Detyra1.vue';
+import MyComponent from './MyComponent.vue';
+import UserForm from './UserForm.vue';
 
 // const heading = document.getElementById("heading");
 // heading.innerHTML = "You did it!";
@@ -145,6 +147,17 @@ const options = ref([
   { value: 'hr', text: 'Human Resources' }
 ])
 const two = ref('two')
+
+function onReadMore(msg) {
+  alert(`Message from child component: ${msg}`);
+  console.log(`Message from child component: ${msg}`)
+}
+
+function onSubmitUser(userData) {
+  console.log("Emri: ", userData.name);
+  console.log("Email: ", userData.email);
+  console.log("Submitted user data: ", userData); 
+}
 </script>
 
 <!-- template - HTML -->
@@ -385,6 +398,42 @@ const two = ref('two')
     </option>
   </select>
   <p>Selected: {{ selected }}</p>
+
+  <!-- Components -->
+  <!-- <my-component /> -->
+  <!-- <MyComponent title="My Component" description="My description" /> -->
+  <!-- <MyComponent 
+    title="Another Component" 
+    description="Another description"
+  /> -->
+  <MyComponent
+    :post="{
+      title: 'Post title',
+      description: 'Post description',
+      createdAt: '2024-06-01'
+    }"
+    @read-more="onReadMore"
+  >
+    <!-- slot default -->
+    <p>This is some content passed from the parent component to the child component using slots.</p>
+    
+    <!-- slot footer -->
+    <template #emriSlotit>
+      <p>This is some content for the footer slot.</p>
+    </template>
+
+    <template #butonat>
+      <button>Butoni tjeter prej slot</button>
+    </template>
+  </MyComponent> 
+
+
+  <!-- Create -->
+  <UserForm  @submit-form="onSubmitUser" />
+
+  <!-- Update -->
+  <!-- <UserForm :is-edit="true" @submit-form="onSubmitUser" /> -->
+  <UserForm is-edit @submit-form="onSubmitUser" />
 </template>
 
 <!-- styles - CSS -->
