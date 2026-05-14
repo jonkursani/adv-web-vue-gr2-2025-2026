@@ -1,8 +1,8 @@
 <script setup></script>
 
 <template>
-  <!-- Ky tag perdoret per renderim te views -->
-  <RouterView />
+    <h1>About</h1>
+    <RouterLink to="/">Home</RouterLink>
 </template>
 
 <style scoped></style>
